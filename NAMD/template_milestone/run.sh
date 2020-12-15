@@ -6,7 +6,7 @@ cd equilibration
 /home/dhiman/NAMD_2.13_Linux-x86_64-multicore/namd2 equilibration.conf > equilibration.log
 #*** Make sure to provide the correct path to NAMD in your cluster in above line ***#
 
-python convert.py > distance.dat
+python calc_rxn_coor.py > distance.dat
 cd ..
 
 # Make sure environment is set

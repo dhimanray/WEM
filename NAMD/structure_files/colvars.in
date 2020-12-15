@@ -1,0 +1,20 @@
+colvarsTrajFrequency    TRAJ_FREQ  #Use the word "TRAJ_FREQ" here, it will be replaced by build.py code 
+
+#Describe appropreate collective variable for your system
+#********* Name the collective variable as 'r' which will be used as progress coordinate *****
+#---------------------------------------------------------------------------------------------
+
+#Na-Cl distnace
+colvar {
+  name r
+
+  distance {
+    group1 {
+      atomNumbers 1 # Na+
+    }
+    group2 {
+      atomNumbers 2 # Cl-
+    }
+  }
+}
+

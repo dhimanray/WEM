@@ -37,7 +37,7 @@ cd $WEST_CURRENT_SEG_DATA_REF
 # Make symbolic links to the topology file and parameter files. These are not
 # unique to each segment.
 ln -sv $WEST_SIM_ROOT/common_files/topology.psf topology.psf
-ln -sv $WEST_SIM_ROOT/common_files/solvate.pdb structure.pdb
+ln -sv $WEST_SIM_ROOT/common_files/structure.pdb structure.pdb
 ln -sv $WEST_SIM_ROOT/bstates/colvars.in colvars.in   #make sure the colvars.in is from bstates and not common_files
 ln -sv $WEST_SIM_ROOT/common_files/toppar_water_ions_namd.str toppar_water_ions_namd.str
 
@@ -58,11 +58,18 @@ sed "s/RAND/$WEST_RAND16/g" \
 # The "ln" command makes symbolic links to the parent segment's edr, gro, and
 # and trr files. This is preferable to copying the files, since it doesn't
 # require writing all the data again.
-ln -sv $WEST_PARENT_DATA_REF/seg.coor ./parent.coor
-ln -sv $WEST_PARENT_DATA_REF/seg.vel  ./parent.vel
-ln -sv $WEST_PARENT_DATA_REF/seg.xsc  ./parent.xsc
-ln -sv $WEST_PARENT_DATA_REF/dist.dat  ./parent.dat
+if [ "$WEST_CURRENT_SEG_INITPOINT_TYPE" = "SEG_INITPOINT_CONTINUES" ]; then
+  ln -sv $WEST_PARENT_DATA_REF/seg.coor ./parent.coor
+  ln -sv $WEST_PARENT_DATA_REF/seg.vel  ./parent.vel
+  ln -sv $WEST_PARENT_DATA_REF/seg.xsc  ./parent.xsc
+  ln -sv $WEST_PARENT_DATA_REF/dist.dat  ./parent.dat
 
+elif [ "$WEST_CURRENT_SEG_INITPOINT_TYPE" = "SEG_INITPOINT_NEWTRAJ" ]; then
+  ln -sv $WEST_SIM_ROOT/bstates/seg.coor ./parent.coor
+  ln -sv $WEST_SIM_ROOT/bstates/seg.vel  ./parent.vel
+  ln -sv $WEST_SIM_ROOT/bstates/seg.xsc  ./parent.xsc
+  ln -sv $WEST_SIM_ROOT/bstates/dist.dat  ./parent.dat
+fi
 ############################## Run the dynamics ################################
 # Propagate the segment using namd2 
 /home/dhiman/NAMD_2.13_Linux-x86_64-multicore/namd2 md.conf > seg.log   
@@ -81,6 +88,7 @@ ln -sv $WEST_PARENT_DATA_REF/dist.dat  ./parent.dat
 echo "$(pwd)"
 #Calculate pcoord with MDAnalysis
 #python $WEST_SIM_ROOT/common_files/get_distance.py
+python $WEST_SIM_ROOT/westpa_scripts/calc_rxn_coor.py > distance.dat
 python $WEST_SIM_ROOT/westpa_scripts/convert.py > dist.dat
 cat dist.dat > $WEST_PCOORD_RETURN
 

@@ -1,0 +1,30 @@
+Updating system with the options from the configuration file
+Traceback (most recent call last):
+  File "/home/dhiman/miniconda3/envs/westpa-openmm/westpa-2020.03/lib/cmds/w_run.py", line 24, in <module>
+    sim_manager = westpa.rc.get_sim_manager()
+  File "/home/dhiman/miniconda3/envs/westpa-openmm/westpa-2020.03/lib/west_tools/westpa/_rc.py", line 242, in get_sim_manager
+    self._sim_manager = self.new_sim_manager()
+  File "/home/dhiman/miniconda3/envs/westpa-openmm/westpa-2020.03/lib/west_tools/westpa/_rc.py", line 234, in new_sim_manager
+    sim_manager = WESimManager(rc=self)
+  File "/home/dhiman/miniconda3/envs/westpa-openmm/westpa-2020.03/src/west/sim_manager.py", line 50, in __init__
+    self.we_driver = self.rc.get_we_driver()
+  File "/home/dhiman/miniconda3/envs/westpa-openmm/westpa-2020.03/lib/west_tools/westpa/_rc.py", line 272, in get_we_driver
+    self._we_driver = self.new_we_driver()
+  File "/home/dhiman/miniconda3/envs/westpa-openmm/westpa-2020.03/lib/west_tools/westpa/_rc.py", line 264, in new_we_driver
+    we_driver = west.we_driver.WEDriver()
+  File "/home/dhiman/miniconda3/envs/westpa-openmm/westpa-2020.03/src/west/we_driver.py", line 63, in __init__
+    self.system = system or self.rc.get_system_driver()
+  File "/home/dhiman/miniconda3/envs/westpa-openmm/westpa-2020.03/lib/west_tools/westpa/_rc.py", line 488, in get_system_driver
+    self._system = self.new_system_driver()
+  File "/home/dhiman/miniconda3/envs/westpa-openmm/westpa-2020.03/lib/west_tools/westpa/_rc.py", line 346, in new_system_driver
+    system = self.update_from_yaml(system, yamloptions)
+  File "/home/dhiman/miniconda3/envs/westpa-openmm/westpa-2020.03/lib/west_tools/westpa/_rc.py", line 458, in update_from_yaml
+    bins_from_yaml_dict(value))
+  File "/home/dhiman/miniconda3/envs/westpa-openmm/westpa-2020.03/lib/west_tools/westpa/_rc.py", line 32, in bins_from_yaml_dict
+    parsed_lists[iboundary] = parsePCV(boundary)[0]
+  File "/home/dhiman/miniconda3/envs/westpa-openmm/westpa-2020.03/lib/west_tools/westpa/_rc.py", line 51, in parsePCV
+    arr = numpy.array(eval(pc_str,namespace))
+  File "<string>", line 1
+    This part will be replaced by the weighted ensemble bin edges
+            ^
+SyntaxError: invalid syntax

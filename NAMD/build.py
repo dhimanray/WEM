@@ -81,7 +81,7 @@ def generate_we_bins(milestones,milestone_index,bin_width):
 
     return bin_list
 
-x = generate_we_bins(milestones,2,we_bin_width)
+#x = generate_we_bins(milestones,2,we_bin_width)
 #print(str(x))
 
 boundaries = str(['-inf',milestones[0],milestones[len(milestones)-1],'inf'])
@@ -113,10 +113,16 @@ for i in range(len(milestones)):
     #copy structure files to equilibration directory
     os.system('cp structure_files/topology.psf %s/equilibration/'%dir_name)
     os.system('cp structure_files/milestone_%d.pdb %s/equilibration/structure.pdb'%(i,dir_name))
+    os.system('cp structure_files/equilibration.conf %s/equilibration/equilibration.conf'%dir_name)
+    os.system('cat structure_files/colvars.in %s/equilibration/restrain.in > %s/equilibration/colvars.in'%(dir_name,dir_name))
 
     #copy structure files to common files directory
     os.system('cp structure_files/topology.psf %s/common_files/'%dir_name)
     os.system('cp structure_files/milestone_%d.pdb %s/common_files/structure.pdb'%(i,dir_name))
+    os.system('cp structure_files/colvars.in %s/common_files/'%dir_name)
+    os.system('cp structure_files/md.conf %s/common_files/md.conf'%dir_name)
+    os.system('cat structure_files/colvars.in %s/common_files/restrain.in > %s/common_files/colvars_restrain.in'%(dir_name,dir_name))
+
 
     #make modifications inside each milestone directory
 
@@ -127,6 +133,7 @@ for i in range(len(milestones)):
     subprocess.call(["sed -i 's/DCD_FREQUENCY/%d/g' %s/equilibration/equilibration.conf"%(equilibration_dcd_frequency,dir_name)], shell=True)
     subprocess.call(["sed -i 's/MINIMIZATION_STEPS/%d/g' %s/equilibration/equilibration.conf"%(minimization_nsteps,dir_name)], shell=True)
     subprocess.call(["sed -i 's/EQUILIBRATION_STEPS/%d/g' %s/equilibration/equilibration.conf"%(equilibration_nsteps,dir_name)], shell=True)
+    subprocess.call(["sed -i 's/TRAJ_FREQ/%d/g' %s/equilibration/colvars.in"%(print_frequency,dir_name)], shell=True)
 
     #change the colvars file for restrained dynamics 
     subprocess.call(["sed -i 's/K_RES/%0.2f/g' %s/common_files/colvars_restrain.in"%(k_res,dir_name)], shell=True)
@@ -171,8 +178,8 @@ for i in range(len(milestones)):
         os.system('cp %s/westpa_scripts/convert_last_milestone.py %s/westpa_scripts/convert.py'%(dir_name,dir_name))
         subprocess.call(["sed -i 's/ENDPOINT/%0.2f/g' %s/westpa_scripts/convert.py"%(milestones[i-1],dir_name)], shell=True)
     else :
-        subprocess.call(["sed -i 's/ENDPOINT1/%0.2f/g' %s/westpa_scripts/convert.py"%(milestones[i-1],dir_name)], shell=True)
-        subprocess.call(["sed -i 's/ENDPOINT2/%0.2f/g' %s/westpa_scripts/convert.py"%(milestones[i+1],dir_name)], shell=True)
+        subprocess.call(["sed -i 's/ENDPOINT_1/%0.2f/g' %s/westpa_scripts/convert.py"%(milestones[i-1],dir_name)], shell=True)
+        subprocess.call(["sed -i 's/ENDPOINT_2/%0.2f/g' %s/westpa_scripts/convert.py"%(milestones[i+1],dir_name)], shell=True)
 
     #change run.sh
     subprocess.call(["sed -i 's/SEGS_PER_STATE/%d/g' %s/run.sh"%(n_traj_per_bin,dir_name)], shell=True)

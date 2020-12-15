@@ -1,0 +1,9 @@
+
+#Apply harmonic restraint
+
+
+harmonic {
+  colvars r
+  centers X_0
+  forceConstant K_EQ
+}
